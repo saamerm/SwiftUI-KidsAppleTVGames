@@ -11,7 +11,9 @@ import SwiftUI
 struct TVGamesApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+//            ContentView()
+//            ArabicAlphabetsView()
+            AddTakeAwayTreatsView()
         }
     }
 }
