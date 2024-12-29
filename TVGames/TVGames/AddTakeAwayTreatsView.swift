@@ -40,21 +40,20 @@ struct AddTakeAwayTreatsView: View {
     var actionDescription: String {
         switch operation {
         case .add:
-            return "Look! \(operand) more cookies were added!"
+            return "Yay! \(operand) more \(operand == 1 ? "cookie was" : "cookies were") added!"
         case .subtract:
-            return "Uh oh! \(operand) cookies were eaten!"
+            return "Oh No! \(operand) more \(operand == 1 ? "cookie was" : "cookies were") eaten!"
         }
     }
 
     var body: some View {
         VStack {
-            Text("Here are \(numberOfCookies) cookies.")
+            Text("There are \(numberOfCookies) \(numberOfCookies == 1 ? "cookie" : "cookies").")
                 .font(.title)
                 .padding()
 
             LazyHStack {
                 ForEach(0..<numberOfCookies, id: \.self) { _ in
-//                    cookieImage
                     Text(cookieImage)
                         .font(.largeTitle)
 //                        .scaledToFit()
@@ -104,13 +103,15 @@ struct AddTakeAwayTreatsView: View {
         }
         .onAppear(){
             resetGame()
-            read()
+//            read()
         } // Start with a new problem
     }
     
     func read(){
 //        actionDescription
-        let utterance = AVSpeechUtterance(string: "There were \(numberOfCookies) cookies. " + actionDescription + ". " + instructionText)
+        let utterance = AVSpeechUtterance(string: "There are \(numberOfCookies) cookies. " + actionDescription + ". " + instructionText)
+        print(numberOfCookies)
+        print(operand)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
         synthesizer.speak(utterance)
 
@@ -118,7 +119,7 @@ struct AddTakeAwayTreatsView: View {
 
     func performOperation() {
         let operationChoice = Bool.random() // Randomly choose add or subtract
-        operand = Int.random(in: 1...3) // Add or subtract a small number
+        operand = Int.random(in: 1...1) // Add or subtract a small number
 
         withAnimation(.easeInOut(duration: 1)) {
             if operationChoice {
@@ -132,6 +133,7 @@ struct AddTakeAwayTreatsView: View {
                 operation = .add
                 numberOfCookies += operand
             }
+            read()
         }
     }
 
@@ -142,7 +144,7 @@ struct AddTakeAwayTreatsView: View {
     }
 
     func resetGame() {
-        numberOfCookies = Int.random(in: 2...5) // Start with a new random number of cookies
+        numberOfCookies = Int.random(in: 1...4) // Start with a new random number of cookies
         showingResult = false
         isCorrect = false
         performOperation() // Trigger the first operation
