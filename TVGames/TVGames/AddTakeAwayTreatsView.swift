@@ -16,6 +16,7 @@ struct AddTakeAwayTreatsView: View {
     @State private var isCorrect = false
     @State private var userGuess = ""
     @State var synthesizer = AVSpeechSynthesizer()
+    let player = AVQueuePlayer()
 
     let cookieImage = "🍪" // Replace with an actual cookie image
 
@@ -95,7 +96,7 @@ struct AddTakeAwayTreatsView: View {
             if showingResult {
                 Button("Next") {
                     resetGame()
-                    read()
+//                    read()
 
                 }
 //                .padding()
@@ -103,7 +104,6 @@ struct AddTakeAwayTreatsView: View {
         }
         .onAppear(){
             resetGame()
-//            read()
         } // Start with a new problem
     }
     
@@ -140,6 +140,12 @@ struct AddTakeAwayTreatsView: View {
     func checkAnswer(guess: Int) {
         showingResult = true
         isCorrect = guess == correctAnswer
+        if let url = Bundle.main.url(forResource: isCorrect ? "good" : "no", withExtension: "m4a") {
+            player.removeAllItems()
+            player.insert(AVPlayerItem(url: url), after: nil)
+            player.play()
+        }
+
         // Play sound effect based on isCorrect (implementation needed)
     }
 
